@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>İkra</title>
+
+<style>
+body {
+  margin:0;
+  font-family: Arial;
+  text-align:center;
+  overflow:hidden;
+  background:#fff;
+  transition:0.5s;
+}
+
+.hidden { display:none; }
+
+#scene {
+  width:100vw;
+  height:100vh;
+  position:relative;
+}
+
+/* ❤️ ORTA KALP */
+.heart {
+  position:absolute;
+  font-size:100px;
+  left:50%;
+  top:50%;
+  transform:translate(-50%, -50%);
+  transition:0.6s;
+}
+
+/* 💬 ORTA YAZI */
+.centerText {
+  position:absolute;
+  left:50%;
+  top:50%;
+  transform:translate(-50%, -50%);
+  font-size:22px;
+  width:80%;
+  text-align:center;
+  filter:blur(6px);
+  transition:0.6s;
+}
+
+/* ❌ HAYIR */
+button {
+  font-size:18px;
+  padding:10px 18px;
+  margin:10px;
+}
+
+/* 🎉 CONFETTI */
+.confetti {
+  position:fixed;
+  top:-10px;
+  font-size:20px;
+  animation: fall 2s linear forwards;
+}
+
+@keyframes fall {
+  to {
+    transform: translateY(110vh);
+    opacity:0;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<!-- BAŞLANGIÇ -->
+<div id="start">
+  <h2>❤️ İkra, bana 2 dakika verir misin?</h2>
+  <button onclick="start()">Başla</button>
+</div>
+
+<!-- SAHNE -->
+<div id="scene" class="hidden"></div>
+
+<!-- FİNAL -->
+<div id="final" class="hidden">
+  <h2>Barışalım mı? 💫</h2>
+
+  <button onclick="yes()">Evet</button>
+  <button id="noBtn">Hayır</button>
+
+  <div id="phone" class="hidden">
+    <h2>❤️ Seni Seviyorum</h2>
+    <button onclick="window.location.href='tel:+905335019849'">📲 Beni Ara</button>
+  </div>
+</div>
+
+<script>
+let i = 0;
+
+const messages = [
+  "Seni düşündüğümde içim ısınıyor ❤️",
+  "Keşke bazı şeyleri daha önce söyleyebilseydim 💫",
+  "Ama sen hâlâ çok özelsin 💖"
+];
+
+// 🚀 BAŞLA
+function start() {
+  document.getElementById("start").classList.add("hidden");
+  document.getElementById("scene").classList.remove("hidden");
+  run();
+}
+
+// ❤️ TAM ORTA PATLAMA + YAZI
+function run() {
+  const scene = document.getElementById("scene");
+
+  if (i >= messages.length) {
+    setTimeout(() => {
+      document.getElementById("scene").classList.add("hidden");
+      document.getElementById("final").classList.remove("hidden");
+    }, 800);
+    return;
+  }
+
+  document.body.style.background = "#0f0f0f";
+  document.body.style.color = "white";
+
+  // ❤️ ORTA KALP
+  const heart = document.createElement("div");
+  heart.className = "heart";
+  heart.innerHTML = "❤️";
+  scene.appendChild(heart);
+
+  // 💥 büyüme
+  setTimeout(() => {
+    heart.style.transform = "translate(-50%, -50%) scale(4)";
+    heart.style.opacity = "0";
+  }, 600);
+
+  setTimeout(() => {
+    heart.remove();
+
+    // 💬 ORTA YAZI
+    const text = document.createElement("div");
+    text.className = "centerText";
+    text.innerText = messages[i];
+    scene.appendChild(text);
+
+    // blur açılma
+    setTimeout(() => {
+      text.style.filter = "blur(0px)";
+    }, 100);
+
+    setTimeout(() => {
+      text.remove();
+      i++;
+      run();
+    }, 1800);
+
+  }, 1000);
+}
+
+// ❤️ EVET
+function yes() {
+  document.getElementById("phone").classList.remove("hidden");
+
+  for (let j = 0; j < 40; j++) {
+    const c = document.createElement("div");
+    c.className = "confetti";
+    c.innerHTML = "🎉";
+    c.style.left = Math.random() * window.innerWidth + "px";
+    c.style.animationDuration = (1 + Math.random() * 2) + "s";
+
+    document.body.appendChild(c);
+
+    setTimeout(() => c.remove(), 3000);
+  }
+}
+
+// ❌ HAYIR KAÇMA
+window.onload = function () {
+  const btn = document.getElementById("noBtn");
+
+  function move() {
+    btn.style.position = "absolute";
+    btn.style.left = Math.random() * (window.innerWidth - 120) + "px";
+    btn.style.top = Math.random() * (window.innerHeight - 120) + "px";
+    btn.style.transition = "0.3s";
+  }
+
+  btn.addEventListener("mouseover", move);
+  btn.addEventListener("touchstart", move);
+};
+</script>
+
+</body>
+</html>
